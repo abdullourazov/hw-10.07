@@ -1,10 +1,9 @@
 using Domain.ApiResponse;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Domain.Paginations;
 
-public class Pagination<T>(IQueryable queryable)
+public class Pagination<T>(IQueryable<T> queryable)
 {
     public async Task<PagedResponse<List<T>>> GetPagedResponseAsync(int pageNumber, int pageSize)
     {
@@ -14,8 +13,7 @@ public class Pagination<T>(IQueryable queryable)
 
             var query = queryable;
 
-            var totalRecords = await query.Count();
-            //var totalRecords = (int)Math.Ceiling((double)totalCount / pageSize);
+            var totalRecords = await query.CountAsync();
 
             var data = await query
                 .Skip((pageNumber - 1) * pageSize)
